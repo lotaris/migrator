@@ -1,0 +1,28 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    active_support (3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
+    escape_utils (0.2.4)
+    fssm (0.2.9)
+    highline (1.6.15)
+    json (1.6.7)
+    paint (0.8.5)
+    sass (3.1.21)
+    svn_wc (0.0.6)
+    yuicompressor (1.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  active_support (>= 2)
+  escape_utils (~> 0.2.4)
+  fssm (~> 0.2.7)
+  highline (~> 1.6.5)
+  json (~> 1.6.3)
+  paint (~> 0.8.3)
+  sass (~> 3.1.11)
+  svn_wc (~> 0.0.5)
+  yuicompressor (~> 1.2.0)

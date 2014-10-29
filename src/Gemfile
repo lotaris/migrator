@@ -1,0 +1,11 @@
+source :rubygems
+
+gem 'active_support', '>= 2'
+gem 'escape_utils', '~> 0.2.4'
+gem 'fssm', '~> 0.2.7'
+gem 'highline', '~> 1.6.5'
+gem 'json', '~> 1.6.3'
+gem 'paint', '~> 0.8.3'
+gem 'sass', '~> 3.1.11'
+gem 'svn_wc', '~> 0.0.5'
+gem 'yuicompressor', '~> 1.2.0'

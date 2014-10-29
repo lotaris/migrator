@@ -1,0 +1,110 @@
+--
+-- Schema initial creation
+--
+
+CREATE TABLE `PRODUCT` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(20) NOT NULL,
+  `PRICE` float NOT NULL,
+  `CURRENCY` varchar(3) NOT NULL,
+  PRIMARY KEY (`ID`)
+) AUTO_INCREMENT=1 ;
+
+
+
+--
+-- Migration - Step 1
+-- Adding new entity to database schema
+--
+CREATE TABLE `COUNTRY` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(20) NOT NULL,
+  `ISOCODE` varchar(3) NOT NULL,
+  PRIMARY KEY (`ID`)
+) AUTO_INCREMENT=1 ;
+
+CREATE TABLE `COUNTRY_CURRENCY` (
+  `COUNTRY_ID` bigint(20) NOT NULL,
+  `CURRENCY_ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`COUNTRY_ID`,`CURRENCY_ID`)
+) ;
+
+CREATE TABLE `CURRENCY` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(20) NOT NULL,
+  `ISOCODE` varchar(3) NOT NULL,
+  PRIMARY KEY (`ID`)
+) AUTO_INCREMENT=1 ;
+
+CREATE TABLE `PRICE` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `AMOUNT` float NOT NULL,
+  `CURRENCY_ID` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) AUTO_INCREMENT=1 ;
+
+CREATE TABLE `PRODUCT_PRICE` (
+  `PRODUCT_ID` bigint(20) NOT NULL,
+  `PRICE_ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`PRODUCT_ID`,`PRICE_ID`)
+) ;
+
+-- Adding constraints
+ALTER TABLE `COUNTRY_CURRENCY` ADD CONSTRAINT `FK_COUNTRY_CURRENCY_CURRENCY_ID` 
+	FOREIGN KEY (`CURRENCY_ID`) REFERENCES `CURRENCY` (`ID`);
+ALTER TABLE `COUNTRY_CURRENCY` ADD CONSTRAINT `FK_COUNTRY_CURRENCY_COUNTRY_ID` 
+	FOREIGN KEY (`COUNTRY_ID`) REFERENCES `COUNTRY` (`ID`);
+ALTER TABLE `PRICE` ADD CONSTRAINT `FK_PRICE_CURRENCY_ID` 
+	FOREIGN KEY (`CURRENCY_ID`) REFERENCES `CURRENCY` (`ID`);
+ALTER TABLE `PRODUCT_PRICE` ADD CONSTRAINT `FK_PRODUCT_PRICE_PRICE_ID` 
+	FOREIGN KEY (`PRICE_ID`) REFERENCES `PRICE` (`ID`);
+ALTER TABLE `PRODUCT_PRICE` ADD CONSTRAINT `FK_PRODUCT_PRICE_PRODUCT_ID` 
+	FOREIGN KEY (`PRODUCT_ID`) REFERENCES `PRODUCT` (`ID`);
+
+-- Adding a field to PRODUCT (with null allowed)
+ALTER TABLE `PRODUCT` ADD COLUMN `TYPE` varchar(15) NULL;
+
+--
+-- Data for migration step 1
+--
+INSERT INTO `COUNTRY` (`ID`, `NAME`, `ISOCODE`) VALUES (1, 'Switzerland', 'CH');
+INSERT INTO `COUNTRY` (`ID`, `NAME`, `ISOCODE`) VALUES (2, 'United States of America', 'US');
+...
+INSERT INTO `CURRENCY` (`ID`, `NAME`, `ISOCODE`) VALUES (1, 'Euro', 'EUR');
+INSERT INTO `CURRENCY` (`ID`, `NAME`, `ISOCODE`) VALUES (2, 'US Dollar ', 'USD');
+...
+INSERT INTO `COUNTRY_CURRENCY` (`COUNTRY_ID`, `CURRENCY_ID`) VALUES ('1', '6');
+INSERT INTO `COUNTRY_CURRENCY` (`COUNTRY_ID`, `CURRENCY_ID`) VALUES ('2', '2');
+...
+-- Request to check associations
+-- SELECT * FROM `COUNTRY` cou, `CURRENCY` cur, `COUNTRY_CURRENCY` cc
+--		WHERE cou.ID = cc.COUNTRY_ID AND cur.ID = cc.CURRENCY_ID;
+
+-- Add the prices into the Price table based on the prices stored in the Product table
+INSERT INTO `PRICE` (`AMOUNT`, `CURRENCY_ID`) 
+	SELECT p.`PRICE`, c.ID FROM `PRODUCT` p, `CURRENCY` c WHERE c.`ISOCODE` = p.`CURRENCY`;
+
+-- Removing the column in the product table
+ALTER TABLE `PRODUCT` DROP COLUMN `PRICE`;
+ALTER TABLE `PRODUCT` DROP COLUMN `CURRENCY`;
+
+
+--
+-- Migration - Step 2
+-- Add type to product table for each product
+--
+UPDATE `PRODUCT` SET `TYPE` = 'Fruit' WHERE `PRODUCT`.`NAME` = 'Apple';
+UPDATE `PRODUCT` SET `TYPE` = 'Vegetable' WHERE `PRODUCT`.`NAME` = 'Cucumber';
+...
+
+
+--
+-- Migration - Step 3
+-- Adding the missing constraint to avoid nullable type in Product table
+--
+ALTER TABLE `PRODUCT` CHANGE `TYPE` `TYPE` VARCHAR( 15 ) NOT NULL;
+
+
+
+
+

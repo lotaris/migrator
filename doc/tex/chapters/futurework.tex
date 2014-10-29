@@ -1,0 +1,25 @@
+\section{Future work}
+
+As we have discussed, our framework is usable in the current state but missed from some points like tests. We have also see that we can improve some aspects of our tools and rules.
+
+\subsection{Testing framework}
+
+To test our migration, the first step we can do is to compare a database that is populated as a new application deployment, in our case, our ORM could do this in development environment, and a database that is managed as production one. It means that the second database is populated and migrated from the migration scripts. Comparing the both database schema enforce the confidence that there is no difference between a newly deployed application from a same version than one that is migrated. The comparison required a tool that is able to compare table schema, constraints, indexes and so on. We could write our own tool or investigate for a tool on the market. It seems to be a quite common need but our preliminary researches for such a tool were not a success.
+
+This kind of tools will not take into account the data into the database, for that we need another tool or process. Our first reflexions for that conducts us in a way that each migration script must contains queries that could be able to test the validity of the migration. Idea is to follow some kind of unit testing. It is probably sufficient for most of the migration but some of them will probably require more than simple queries. We need to think about advanced requirements to test data.
+
+\subsection{Building tool improvements}
+
+Actually, we do not have any simple validation of the queries that are written. A good solution is to improve the script building tool with a validation framework that enable to check the correctness of the SQL queries written. These verifications will manage syntax errors but not the semantic errors. These ones could only be handled by solution we have just described in previous section. The framework we want to add in our tool must be flexible that it could be possible to add easily new rules when new kind of errors are discovered. For example, we want to enforce that each query is prefixed by the correct database to avoid running queries agains the wrong database if erroneous database is selected at the script runtime.
+
+A second axe that we want to improved is the data and metrics we gathered around the migration. We want to add more details for each migration parts. For example, we want to add the person who wrote the migration and the person who wrote the modification. In the majority of the cases, it will be the same but sometimes not. When this is not the case, it could be interesting to understand why there was two persons involved in the migration script part. Gathering the comments from the versioning tool is also useful to keep track of migration against code modifications. They are a lot of data that we can retrieve to enrich the migration data.
+
+Finally, we would also improve the metrics that we calculate and analyze them. It allows to see the trends of migrations, by which script / queries the time is consumed by a migration. As we run migration in pre-production environment, these data could be used to improve the migration scripts before running them into a real environment.
+
+\subsection{Automatic builds}
+
+The previous improvement will logically conduct us to the automation of the building process. The concept of nightly build is relatively widespread. We want to use this concept also for the migration process. Idea is to build the migration script every night and to run it agains a database in a state to be migrate. With a comparator tool and other testing tools, we could put all together and construct an automation of building, running and testing a migration script. This allows to be pretty ready every day for a migration. Unfortunately, it is only possible to use such an approach if we have sufficient testing tools.
+
+\subsection{Tracking}
+
+As we have described, we want to add a validation framework to our building tool. This is clearly useful and help us to save time in debugging process but it is not sufficient. The building tool is only used when a migration is prepared and this is near the end of the whole process. It occurs too late in the migration process. One other solution is to add this validation process in the same way that we track any changes in data model in the code. We could add these validations at the commit time to ensure the scripts are basically correct and forbid the commit if the script contains errors. This way will, for sure, save a lot of time for the migration manager.

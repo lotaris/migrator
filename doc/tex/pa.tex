@@ -1,0 +1,104 @@
+% smrdoc.tex V2.0, 13 May 2010
+\documentclass[times]{smrauth}
+
+% Added packages
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{moreverb}
+\usepackage[dvips,colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
+
+
+\floatname{algorithm}{Pseudo Code}
+\def\sectionautorefname{section}
+\def\subsectionautorefname{section}
+\def\subsubsectionautorefname{section}
+\def\figureautorefname{figure}
+
+\definecolor{dark-gray}{rgb}{0.7,0.7,0.7}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{light-gray}{rgb}{0.9,0.9,0.9}
+
+\renewcommand{\algorithmiccomment}[1]{\color{gray}\emph{// #1}\color{black}}
+
+\newcommand{\tvar}[1]{\emph{#1}}
+\newcommand{\tdefine}[2]{\textbf{define} \tvar{#1} = #2}
+\newcommand{\tquote}[1]{\textquotesingle\textquotesingle#1\textquotesingle\textquotesingle}
+\newcommand{\tsingquote}[1]{\textquotesingle#1\textquotesingle}
+
+\newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\def\volumeyear{2010}
+
+\lstdefinestyle{sqlStyle}{
+  breaklines=true,                                     % line wrapping on
+  language=SQL,
+  basicstyle=\tiny,
+  keywordstyle=\ttfamily\color{black}\bfseries,
+  identifierstyle=\ttfamily\color{black},
+  commentstyle=\color{gray},
+  stringstyle=\ttfamily\color{dark-gray},
+  showstringspaces=false,
+  tabsize=2,
+  extendedchars=true,
+  upquote=true,
+  backgroundcolor=\color{light-gray},
+  captionpos=b,
+  frame=single,
+  frameround=tttt,
+  fillcolor=\color{light-gray},
+  float=h,
+  morekeywords={AUTO_INCREMENT, bigint, REFERENCES, CHANGE, NOW, TIMESTAMPDIFF, SECOND}
+}
+
+\begin{document}
+
+\runningheads{L. Prévost and O. Liechti}{}
+
+\title{Database Evolution Framework}
+%\title{A demonstration of the \LaTeXe\ class file for the
+%\itshape{\journalnamelc}\footnotemark[2]}
+
+\author{Laurent Prévost\affil{1,2}, Olivier Liechti\affil{1,2}}
+\address{
+\affilnum{1}University of Applied Sciences of Western Switzerland, 1400 Yverdon-les-Bains, Switzerland\break
+\affilnum{2}Lotaris SA, Galilée 15, 1400 Yverdon-les-Bains, Switzerland}
+
+
+%\corraddr{Journals Production Department, John Wiley \& Sons, Ltd,
+%The Atrium, Southern Gate, Chichester, West Sussex, PO19~8SQ, UK.}
+
+\begin{abstract}
+
+In a service oriented architecture, dealing with the evolution of the underlying database is not a trivial problem. New functional requirements are often associated with modifications of the domain model, hence with modifications of the relational schema. These modifications have to be done in a way that does not impact existing services and applications. They also have to be done in a way that preserves consistency in the data store. Last but not least, they have to be done in a way that has minimal impact on the service availability. In this paper, we propose a framework that supports the development, maintenance and operational activities. The framework consists of processes, tools and best practices. It is the result of our practical experience with a large-scale commercial internet service, which is characterized both by a constant and rapid functional evolution and by strict operational constraints. 
+
+\end{abstract}
+
+
+\keywords{}
+
+\maketitle
+
+%\footnotetext[2]{Please ensure that you use the most up to date
+%class file,
+%available from the SMR Home Page at\\
+%\href{http://www3.interscience.wiley.com/journal/117946198/grouphome/home.html}{\texttt{http://www3.interscience.wiley.com/journal/117946198/grouphome/home.html}}}
+
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+\input{chapters/intro.tex}
+\input{chapters/related.tex}
+\input{chapters/def.tex}
+\input{chapters/risks.tex}
+\input{chapters/casestudy.tex}
+\input{chapters/futurework.tex}
+\input{chapters/conclusion.tex}
+
+\bibliographystyle{plain}
+\bibliography{pa}
+\end{document}
